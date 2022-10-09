@@ -17,7 +17,7 @@
         <button onclick="renderTable('house/slytherin')">Slytherin</button>
         <button onclick="renderTable('house/ravenclaw')">Ravenclaw</button>
         <button onclick="renderTable('house/hufflepuff')">Hufflepuff</button>
-        <button onclick="location.href='favourites';">Favourites</button>
+        <button onclick="location.href='favourites.html';">Favourites</button>
     </nav>
 
     <table id="students" class="students" border="1px">
@@ -29,19 +29,33 @@
                 <th id="house" onclick="sortTable('house')" class="pointer">House</th>
                 <th id="wizard">Wizard</th>
                 <th id="ancestry">Ancestry</th>
-                <th id="hogwartsStudent">Is student</th>
+                <th id="hogwartsStudent">Role</th>
             </tr>
         </thead>
     </table>
 
     <div class="modal" id="modal">
-        <img src="" alt="student's image">
-        <h2 id="modal__name"></h2>
-        <ul id="modal__info"></ul>
-        <div id="modal__close" onclick="closeCharacterModal()"></div>
+        <div class="modal__content">
+            <div class="left">
+                <img src="">
+                <h2 id="modal__name"></h2>
+            </div>
+            <div class="right">
+                <div class="buttons">
+                    <button class="button" id="modal__fav" onclick="addToFavourites()"></button>
+                    <button class="button" id="modal__close" onclick="closeCharacterModal()"></button>
+                </div>
+
+                <ul id="modal__info"></ul>
+            </div>
+        </div>
+
     </div>
 
     <script src="script.js"></script>
+    <script>
+        renderTable("students");
+    </script>
 </body>
 
 </html>

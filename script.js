@@ -1,8 +1,24 @@
-const api = "https://hp-api.herokuapp.com/api/characters/";
-const table = document.getElementById("students");
-const category = "students";
-let studentData = null;
-let sortMode = null;
+const api = "https://hp-api.herokuapp.com/api/characters/"; // link to the api
+// const category = "students"; // api route
+const table = document.getElementById("students"); // html table
+let studentData = null; // data fetched from api
+let sortMode = null; // sorting direction
+
+let openedCharacter = null;
+let favourites;
+
+function getFavourites() {
+    if (document.cookie.length != 0) {
+        let cookieArr = document.cookie.split("=");
+        favourites = cookieArr[1];
+
+        return favourites;
+    }
+    return [];
+}
+
+// getFavourites();
+// favourites = 
 
 const title = document.getElementById("students__title");
 
@@ -55,15 +71,8 @@ async function renderTable(category, sortBy) {
         });
     }
 
-    // console.log({ studentData })
-
     for (let i = 0; i < studentData.length; i++) {
         const row = document.createElement("tr");
-        // for (let j = 0, cellValue; cell = table.rows[0].cells[j]; j++) {
-        //     var column = cell.id;
-        //     console.log(typeof column);
-        //     console.log(studentData[i].name);
-        // }
 
         const nameCell = document.createElement("td");
         nameCell.textContent = studentData[i].name;
@@ -114,31 +123,99 @@ function sortTable(col) {
 }
 
 function openCharacterModal(character) {
+    openedCharacter = character;
+
     const modal = document.getElementById("modal");
     const modalImg = modal.querySelector("img");
     const modalName = document.getElementById("modal__name");
     const modalInfoList = document.getElementById("modal__info");
-    const characterInfo = ["actor", "ancestry", "dateOfBirth", "eyeColour", "gender", "hairColour", "house", "patronus", "species", "wand"];
+
+    const characterInfo = ["actor", "ancestry", "dateOfBirth", "eyeColour", "gender", "hairColour", "house", "patronus", "species"];
+
+    modalInfoList.innerHTML = "";
+
+    for (info of characterInfo) {
+        const listElement = document.createElement("li");
+        listElement.innerHTML = info + ": " + character[info]
+        modalInfoList.appendChild(listElement)
+    }
+
 
     modalImg.src = character.image;
     modalName.innerHTML = character.name;
 
-    // cant get attribute from string
-    for (info of characterInfo) {
-        console.log(character.info);
-    }
 
     modal.style.display = 'block';
 }
 
 function closeCharacterModal() {
+    openedCharacter = null;
+
     const modal = document.getElementById("modal");
     modal.style.display = 'none';
 }
 
-renderTable(category);
+function addToFavourites() {
+    // console.log(JSON.stringify(openedCharacter));
+
+    favourites = getFavourites();
+    if (favourites.length != 0) favourites += ",";
+    // favourites.push(openedCharacter);
+    favourites += JSON.stringify(openedCharacter);
+
+    document.cookie = "fav=" + favourites;
+    console.log("added " + openedCharacter.name + " to favourites");
+}
+
+function renderFavourites() {
+    favourites = JSON.parse("[" + getFavourites() + "]");
+
+    favouritesList = document.getElementById("favourites");
+
+    for (let i = 0; i < favourites.length; i++) {
+        favouritesListItem = document.createElement("div");
+        favouritesListImage = document.createElement("img");
+        favouritesListName = document.createElement("h3");
+        favouritesListRemoveButton = document.createElement("button");
+
+        favouritesListItem.className = "favourites__tile";
+
+        favouritesListImage.src = favourites[i].image;
+        favouritesListName.innerHTML = favourites[i].name;
+
+        favouritesListRemoveButton.className = "button favourites__remove";
+        favouritesListRemoveButton.addEventListener('click', function() {
+            favourites.remove(favourites[i]);
+            console.log(favourites);
+            // document.cookie = "fav=" + JSON.stringify(favourites);
+            // renderFavourites();
+        })
+
+        favouritesListItem.appendChild(favouritesListImage)
+        favouritesListItem.appendChild(favouritesListName)
+        favouritesListItem.appendChild(favouritesListRemoveButton)
+        favouritesList.appendChild(favouritesListItem)
 
 
+    }
+
+
+}
+
+function clearFavourites() {
+    document.cookie = "fav=; expires=Thu, 01 Jan 1970 00:00:00 UTC;"
+    return "cleared favourites";
+}
+
+
+
+// ----- Funkcjonalność -----
 // sortowanie dat
-// wyświetlanie danych w modalu
+// usuwanie z ulubionych
+// sprawdzić czy postaci już nie ma w ulubionych
+
+// ----- Style -----
+// Dane postaci camelCase -> sentence case
+// wygląd wszystkiego xD
+// responsywność
 //
