@@ -14,15 +14,13 @@
     <nav>
         <button onclick="location.href='index.html';">Home</button>
         <button onclick="clearFavourites()">Delete all</button>
+        <label for="rowCount">How many rows:</label>
+        <button onclick="changeRowNumber(1)">1</button>
+        <button onclick="changeRowNumber(3)" name="rowCount">3</button>
+        <button onclick="changeRowNumber(5)">5</button>
     </nav>
 
-    <div id="favourites" class="favourites">
-        <div class="favourites__tile">
-            <img src="https://hp-api.herokuapp.com/images/harry.jpg" alt="">
-            <h3>Harry Potter</h3>
-            <button class="button favourites__remove"></button>
-        </div>
-    </div>
+    <div id="favourites" class="favourites" style="grid-template-columns: 1fr 1fr 1fr;"></div>
 
     <script src="script.js"></script>
     <script>

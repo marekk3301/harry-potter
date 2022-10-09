@@ -156,13 +156,17 @@ function closeCharacterModal() {
 }
 
 function addToFavourites() {
-    // console.log(JSON.stringify(openedCharacter));
-
     favourites = getFavourites();
-    if (favourites.length != 0) favourites += ",";
-    // favourites.push(openedCharacter);
-    favourites += JSON.stringify(openedCharacter);
+    characterStr = JSON.stringify(openedCharacter);
 
+    if (favourites.includes(characterStr)) {
+        console.log("already in favourites")
+        return;
+    }
+
+    if (favourites.length != 0) favourites += ",";
+
+    favourites += characterStr;
     document.cookie = "fav=" + favourites;
     console.log("added " + openedCharacter.name + " to favourites");
 }
@@ -171,6 +175,7 @@ function renderFavourites() {
     favourites = JSON.parse("[" + getFavourites() + "]");
 
     favouritesList = document.getElementById("favourites");
+    favouritesList.innerHTML = "";
 
     for (let i = 0; i < favourites.length; i++) {
         favouritesListItem = document.createElement("div");
@@ -185,10 +190,10 @@ function renderFavourites() {
 
         favouritesListRemoveButton.className = "button favourites__remove";
         favouritesListRemoveButton.addEventListener('click', function() {
-            favourites.remove(favourites[i]);
-            console.log(favourites);
-            // document.cookie = "fav=" + JSON.stringify(favourites);
-            // renderFavourites();
+            favourites.splice(i, 1);
+            cookieStr = JSON.stringify(favourites);
+            document.cookie = "fav=" + cookieStr.substring(1, cookieStr.length - 1);
+            renderFavourites();
         })
 
         favouritesListItem.appendChild(favouritesListImage)
@@ -203,10 +208,16 @@ function renderFavourites() {
 }
 
 function clearFavourites() {
-    document.cookie = "fav=; expires=Thu, 01 Jan 1970 00:00:00 UTC;"
+    document.cookie = "fav=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    document.getElementById("favourites").innerHTML = "";
     return "cleared favourites";
 }
 
+function changeRowNumber(rowNumber) {
+    columnTemplate = "grid-template-columns: " + "1fr ".repeat(rowNumber) + ";";
+    console.log(columnTemplate);
+    document.getElementById("favourites").style = columnTemplate;
+}
 
 
 // ----- Funkcjonalność -----
