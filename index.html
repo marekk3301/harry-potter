@@ -6,26 +6,40 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="style.css">
     <title>Harry Potter Students</title>
 </head>
 
 <body>
-    <table id="students" class="students">
+    <nav>
+        <button onclick="renderTable('students')">All students</button>
+        <button onclick="renderTable('house/gryffindor')">Gryffindor</button>
+        <button onclick="renderTable('house/slytherin')">Slytherin</button>
+        <button onclick="renderTable('house/ravenclaw')">Ravenclaw</button>
+        <button onclick="renderTable('house/hufflepuff')">Hufflepuff</button>
+        <button onclick="location.href='favourites';">Favourites</button>
+    </nav>
+
+    <table id="students" class="students" border="1px">
         <caption id="students__title">All students</caption>
         <thead>
             <tr>
-                <th id="name">Name</th>
-                <th id="dateOfBirth">Date of birth</th>
-                <th id="house">House</th>
+                <th id="name" onclick="sortTable('name')" class="pointer">Name</th>
+                <th id="dateOfBirth" onclick="sortTable('dateOfBirth')" class="pointer">Date of birth</th>
+                <th id="house" onclick="sortTable('house')" class="pointer">House</th>
                 <th id="wizard">Wizard</th>
                 <th id="ancestry">Ancestry</th>
                 <th id="hogwartsStudent">Is student</th>
             </tr>
         </thead>
-        <tbody>
-
-        </tbody>
     </table>
+
+    <div class="modal" id="modal">
+        <img src="" alt="student's image">
+        <h2 id="modal__name"></h2>
+        <ul id="modal__info"></ul>
+        <div id="modal__close" onclick="closeCharacterModal()"></div>
+    </div>
 
     <script src="script.js"></script>
 </body>
