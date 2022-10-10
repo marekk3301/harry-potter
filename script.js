@@ -54,7 +54,6 @@ async function renderTable(category, sortBy) {
         });
     } else if (sortBy === "dateOfBirth") {
         studentData.sort(function(a, b) {
-            // definitely not a way to sort dates :D
             if (sortMode === 'asc') {
                 return ('' + a.dateOfBirth).localeCompare(b.dateOfBirth);
             }
@@ -134,13 +133,14 @@ function openCharacterModal(character) {
     const modalName = document.getElementById("modal__name");
     const modalInfoList = document.getElementById("modal__info");
 
+    // list of character attributes that get displayed in modal
     const characterInfo = ["actor", "ancestry", "dateOfBirth", "eyeColour", "gender", "hairColour", "house", "patronus", "species"];
 
     modalInfoList.innerHTML = "";
 
     for (info of characterInfo) {
         const listElement = document.createElement("li");
-        const infoText = info.replace(/([A-Z])/g, " $1");
+        const infoText = info.replace(/([A-Z])/g, " $1"); // adding spaces to camelCase
         const finalInfoText = infoText.charAt(0).toUpperCase() + infoText.slice(1);
         listElement.innerHTML = finalInfoText + ": " + character[info]
         modalInfoList.appendChild(listElement)
@@ -221,6 +221,7 @@ function renderFavourites() {
 
         favouritesListItem.className = "favourites__tile";
 
+        // default profile pic
         favouritesListImage.src = favourites[i].image;
         if (!favourites[i].image) {
             if (favourites[i].gender === "male") favouritesListImage.src = "images/defaultWizard.png";
@@ -228,6 +229,7 @@ function renderFavourites() {
         }
         favouritesListName.innerHTML = favourites[i].name;
 
+        // remove favourite button
         favouritesListRemoveButton.className = "button favourites__remove";
         favouritesListRemoveButton.addEventListener('click', function() {
             favourites.splice(i, 1);
@@ -254,13 +256,3 @@ function changeRowNumber(rowNumber) {
     console.log(columnTemplate);
     document.getElementById("favourites").style = columnTemplate;
 }
-
-
-// ----- Funkcjonalność -----
-// sortowanie dat
-
-// ----- Style -----
-// Dane postaci camelCase -> sentence case
-// wygląd wszystkiego xD
-// responsywność !!!
-// stopka
