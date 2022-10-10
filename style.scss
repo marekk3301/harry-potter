@@ -1,0 +1,222 @@
+@import url('https://fonts.googleapis.com/css2?family=Alkalami&family=Figtree:wght@300;400;700&display=swap');
+// ----- colors -----
+$accent: #7F0909;
+$background: #FFC500;
+$white: #ffffff;
+$black: #1a1a1a;
+// ----- fonts -----
+$headerFont: 'Alkalami',
+serif;
+$paragraphFont: 'Figtree',
+sans-serif;
+//
+@mixin modal-half {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+}
+
+@mixin center-absolute {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@mixin button {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    border: none;
+}
+
+@mixin verticalBorder($color) {
+    border-left: 2px solid $color;
+    &:first-of-type {
+        border-left: none;
+    }
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+body {
+    background-color: $background;
+    .navigation {
+        position: relative;
+        height: 60px;
+        background-color: $accent;
+        font-family: $headerFont;
+        color: $background;
+        .navigation__elements {
+            vertical-align: middle;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+            justify-content: center;
+            max-width: 800px;
+            height: 100%;
+            margin: auto;
+            .navigation__selection {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                &:hover {
+                    background-color: $background;
+                    color: $accent;
+                    font-weight: 700;
+                    border: {
+                        top: 3px solid $accent;
+                        bottom: 3px solid $accent;
+                    }
+                }
+            }
+            .navigation__rowCountButtons {
+                grid-column: span 4;
+                display: flex;
+                label {
+                    display: flex;
+                    align-items: center;
+                    line-height: 1.2em;
+                    padding: 0 15px;
+                }
+                button {
+                    margin: 15px;
+                    width: 30px;
+                    height: 30px;
+                    border: none;
+                    border-radius: 5px;
+                    background-color: $background;
+                    color: $accent;
+                    font-family: $paragraphFont;
+                }
+            }
+        }
+    }
+    table {
+        margin: auto;
+        border-spacing: 0;
+        border: 3px solid $accent;
+        #students__title {
+            font-family: $headerFont;
+            font-size: 1.2em;
+            color: $accent;
+            margin: 10px 0 0 0;
+        }
+        thead {
+            font-family: $paragraphFont;
+            font-weight: 700;
+            color: $white;
+            th {
+                @include verticalBorder($accent);
+                border-bottom: 2px solid $accent;
+                padding: 10px;
+            }
+        }
+        tbody {
+            font-family: $paragraphFont;
+            tr {
+                &:hover {
+                    // opacity: 0.8;
+                    // font-weight: 700;
+                    text-shadow: 0px 0px 1px $black;
+                }
+            }
+            td {
+                min-width: 75px;
+                padding: 10px;
+                text-align: center;
+                @include verticalBorder($accent);
+                &:first-of-type {
+                    text-align: left;
+                }
+            }
+        }
+    }
+    .modal {
+        @include center-absolute;
+        display: none;
+        position: fixed;
+        width: 80%;
+        height: 80%;
+        background-color: $white;
+        border-radius: 25px;
+        border: 2px solid $black;
+        .modal__content {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            .left {
+                @include modal-half;
+                img {
+                    width: 200px;
+                }
+                h2 {
+                    font-family: $headerFont;
+                    margin: 15px;
+                }
+            }
+            .right {
+                @include modal-half;
+                .buttons {
+                    position: absolute;
+                    top: 25px;
+                    right: 25px;
+                    .button {
+                        @include button;
+                        margin-left: 8px;
+                    }
+                    #modal__close {
+                        background-image: url("icons/xmark-solid.svg");
+                        transform: scale(130%);
+                    }
+                    #modal__fav {
+                        background-image: url("icons/heart-regular.svg");
+                    }
+                }
+                #modal__info {
+                    list-style: none;
+                    font-family: $paragraphFont;
+                }
+            }
+        }
+    }
+    .favourites {
+        display: grid;
+        padding: 10px;
+        .favourites__tile {
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border: 2px solid $black;
+            border-radius: 10px;
+            margin: 10px;
+            background-color: $white;
+            img {
+                width: 30%;
+            }
+            h3 {
+                margin-left: 15px;
+            }
+            .favourites__remove {
+                @include button;
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background-image: url("icons/trash-solid.svg");
+            }
+        }
+    }
+}

@@ -1,89 +1,205 @@
+@import url("https://fonts.googleapis.com/css2?family=Alkalami&family=Figtree:wght@300;400;700&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .pointer {
-    cursor: pointer;
+  cursor: pointer;
 }
 
-.modal {
-    display: none;
-    position: fixed;
-    width: 80%;
-    height: 80%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #ffffff;
-    border-radius: 25px;
-    border: 2px solid black;
+body {
+  background-color: #FFC500;
+}
+body .navigation {
+  position: relative;
+  height: 60px;
+  background-color: #7F0909;
+  font-family: "Alkalami", serif;
+  color: #FFC500;
+}
+body .navigation .navigation__elements {
+  vertical-align: middle;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  justify-content: center;
+  max-width: 800px;
+  height: 100%;
+  margin: auto;
+}
+body .navigation .navigation__elements .navigation__selection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+body .navigation .navigation__elements .navigation__selection:hover {
+  background-color: #FFC500;
+  color: #7F0909;
+  font-weight: 700;
+  border-top: 3px solid #7F0909;
+  border-bottom: 3px solid #7F0909;
+}
+body .navigation .navigation__elements .navigation__rowCountButtons {
+  grid-column: span 4;
+  display: flex;
+}
+body .navigation .navigation__elements .navigation__rowCountButtons label {
+  display: flex;
+  align-items: center;
+  line-height: 1.2em;
+  padding: 0 15px;
+}
+body .navigation .navigation__elements .navigation__rowCountButtons button {
+  margin: 15px;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 5px;
+  background-color: #FFC500;
+  color: #7F0909;
+  font-family: "Figtree", sans-serif;
+}
+body table {
+  margin: auto;
+  border-spacing: 0;
+  border: 3px solid #7F0909;
+}
+body table #students__title {
+  font-family: "Alkalami", serif;
+  font-size: 1.2em;
+  color: #7F0909;
+  margin: 10px 0 0 0;
+}
+body table thead {
+  font-family: "Figtree", sans-serif;
+  font-weight: 700;
+  color: #ffffff;
+}
+body table thead th {
+  border-left: 2px solid #7F0909;
+  border-bottom: 2px solid #7F0909;
+  padding: 10px;
+}
+body table thead th:first-of-type {
+  border-left: none;
+}
+body table tbody {
+  font-family: "Figtree", sans-serif;
+}
+body table tbody tr:hover {
+  text-shadow: 0px 0px 1px #1a1a1a;
+}
+body table tbody td {
+  min-width: 75px;
+  padding: 10px;
+  text-align: center;
+  border-left: 2px solid #7F0909;
+}
+body table tbody td:first-of-type {
+  border-left: none;
+}
+body table tbody td:first-of-type {
+  text-align: left;
+}
+body .modal {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  position: fixed;
+  width: 80%;
+  height: 80%;
+  background-color: #ffffff;
+  border-radius: 25px;
+  border: 2px solid #1a1a1a;
+}
+body .modal .modal__content {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+body .modal .modal__content .left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+}
+body .modal .modal__content .left img {
+  width: 200px;
+}
+body .modal .modal__content .left h2 {
+  font-family: "Alkalami", serif;
+  margin: 15px;
+}
+body .modal .modal__content .right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+}
+body .modal .modal__content .right .buttons {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+}
+body .modal .modal__content .right .buttons .button {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  border: none;
+  margin-left: 8px;
+}
+body .modal .modal__content .right .buttons #modal__close {
+  background-image: url("icons/xmark-solid.svg");
+  transform: scale(130%);
+}
+body .modal .modal__content .right .buttons #modal__fav {
+  background-image: url("icons/heart-regular.svg");
+}
+body .modal .modal__content .right #modal__info {
+  list-style: none;
+  font-family: "Figtree", sans-serif;
+}
+body .favourites {
+  display: grid;
+  padding: 10px;
+}
+body .favourites .favourites__tile {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border: 2px solid #1a1a1a;
+  border-radius: 10px;
+  margin: 10px;
+  background-color: #ffffff;
+}
+body .favourites .favourites__tile img {
+  width: 30%;
+}
+body .favourites .favourites__tile h3 {
+  margin-left: 15px;
+}
+body .favourites .favourites__tile .favourites__remove {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  border: none;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-image: url("icons/trash-solid.svg");
 }
 
-.modal__content {
-    display: flex;
-    width: 100%;
-    height: 100%;
-}
-
-.left,
-.right {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 50%;
-}
-
-.left img {
-    width: 200px;
-}
-
-.buttons {
-    position: absolute;
-    top: 25px;
-    right: 25px;
-}
-
-.button {
-    display: inline-block;
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-}
-
-#modal__close,
-.favourites__remove {
-    background-color: red;
-}
-
-#modal__fav {
-    background-color: yellow;
-}
-
-#modal__info {
-    list-style: none;
-}
-
-.favourites {
-    display: grid;
-}
-
-.favourites__tile {
-    position: relative;
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    border: 1px solid black;
-    border-radius: 10px;
-    margin: 10px;
-}
-
-.favourites__tile img {
-    width: 30%;
-}
-
-.favourites__tile h3 {
-    margin-left: 15px;
-}
-
-.favourites__tile .favourites__remove {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-}
+/*# sourceMappingURL=style.css.map */

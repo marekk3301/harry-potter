@@ -5,25 +5,28 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/x-icon" href="icons/favicon.ico">
     <link rel="stylesheet" href="style.css">
     <title>Harry Potter Students</title>
 </head>
 
 <body>
-    <nav>
-        <button onclick="renderTable('students')">All students</button>
-        <button onclick="renderTable('house/gryffindor')">Gryffindor</button>
-        <button onclick="renderTable('house/slytherin')">Slytherin</button>
-        <button onclick="renderTable('house/ravenclaw')">Ravenclaw</button>
-        <button onclick="renderTable('house/hufflepuff')">Hufflepuff</button>
-        <button onclick="location.href='favourites.html';">Favourites</button>
+    <nav class="navigation">
+        <div class="navigation__elements">
+            <div class="navigation__selection pointer" onclick="renderTable('students')">All students</div>
+            <div class="navigation__selection pointer" onclick="renderTable('house/gryffindor')">Gryffindor</div>
+            <div class="navigation__selection pointer" onclick="renderTable('house/slytherin')">Slytherin</div>
+            <div class="navigation__selection pointer" onclick="renderTable('house/ravenclaw')">Ravenclaw</div>
+            <div class="navigation__selection pointer" onclick="renderTable('house/hufflepuff')">Hufflepuff</div>
+            <div class="navigation__selection pointer" onclick="location.href='favourites.html';">Favourites</div>
+        </div>
+
     </nav>
 
-    <table id="students" class="students" border="1px">
-        <caption id="students__title">All students</caption>
+    <table id="students" class="students">
+        <caption id="students__title"></caption>
         <thead>
-            <tr>
+            <tr id="tableHeader">
                 <th id="name" onclick="sortTable('name')" class="pointer">Name</th>
                 <th id="dateOfBirth" onclick="sortTable('dateOfBirth')" class="pointer">Date of birth</th>
                 <th id="house" onclick="sortTable('house')" class="pointer">House</th>

@@ -1,26 +1,14 @@
 const api = "https://hp-api.herokuapp.com/api/characters/"; // link to the api
-// const category = "students"; // api route
 const table = document.getElementById("students"); // html table
+
 let studentData = null; // data fetched from api
 let sortMode = null; // sorting direction
 
-let openedCharacter = null;
+let openedCharacter = null; // using for modal info
+let house = null; // using for caption and row colors
 let favourites;
 
-function getFavourites() {
-    if (document.cookie.length != 0) {
-        let cookieArr = document.cookie.split("=");
-        favourites = cookieArr[1];
-
-        return favourites;
-    }
-    return [];
-}
-
-// getFavourites();
-// favourites = 
-
-const title = document.getElementById("students__title");
+let rowColors = { "gryffindor": "#7F0909", "slytherin": "#196027", "ravenclaw": "#003875", "hufflepuff": "#b55d1d", "gryffindor0": "#cf9797", "gryffindor1": "#ffd54d", "slytherin0": "#98d4a4", "slytherin1": "#dcfaf6", "ravenclaw0": "#8a9fb8", "ravenclaw1": "#cae1fc", "hufflepuff0": "#d9b78f", "hufflepuff1": "#ffd498" };
 
 async function fetchData(category) {
     let url = api;
@@ -36,6 +24,16 @@ async function fetchData(category) {
 async function renderTable(category, sortBy) {
     const table = document.getElementById("students");
     let tableBody = table.querySelector("tbody");
+
+    // 
+    if (house) {
+        // catching error when category doesn't contain "/"
+        try {
+            house = category.split("/")[1];
+            document.getElementById("students__title").innerHTML = house.charAt(0).toUpperCase() + house.slice(1);
+        } catch (TypeError) {}
+    } else document.getElementById("students__title").innerHTML = "All Students";
+
 
     if (!tableBody) {
         tableBody = document.createElement("tbody");
@@ -71,6 +69,7 @@ async function renderTable(category, sortBy) {
         });
     }
 
+    // populating table with (filtered) student data
     for (let i = 0; i < studentData.length; i++) {
         const row = document.createElement("tr");
 
@@ -108,8 +107,13 @@ async function renderTable(category, sortBy) {
             openCharacterModal(studentData[i]);
         })
 
+        // alternating table row colors
+        if (!house) house = "gryffindor";
+        row.style.backgroundColor = rowColors[house + (i % 2).toString()];
+
         tableBody.appendChild(row);
     }
+    document.getElementById("tableHeader").style.backgroundColor = rowColors[house];
 }
 
 function sortTable(col) {
@@ -136,14 +140,21 @@ function openCharacterModal(character) {
 
     for (info of characterInfo) {
         const listElement = document.createElement("li");
-        listElement.innerHTML = info + ": " + character[info]
+        const infoText = info.replace(/([A-Z])/g, " $1");
+        const finalInfoText = infoText.charAt(0).toUpperCase() + infoText.slice(1);
+        listElement.innerHTML = finalInfoText + ": " + character[info]
         modalInfoList.appendChild(listElement)
     }
 
-
     modalImg.src = character.image;
+    if (!character.image) {
+        if (character.gender === "male") modalImg.src = "images/defaultWizard.png";
+        else if (character.gender === "female") modalImg.src = "images/defaultWitch.png";
+    }
     modalName.innerHTML = character.name;
 
+    if (checkFavourites()) document.getElementById("modal__fav").style.backgroundImage = "url('icons/heart-solid.svg')";
+    else document.getElementById("modal__fav").style.backgroundImage = "url('icons/heart-regular.svg')";
 
     modal.style.display = 'block';
 }
@@ -155,20 +166,45 @@ function closeCharacterModal() {
     modal.style.display = 'none';
 }
 
+function getFavourites() {
+    if (document.cookie.length != 0) {
+        let cookieArr = document.cookie.split("=");
+        favourites = cookieArr[1];
+
+        return favourites;
+    }
+    return [];
+}
+
 function addToFavourites() {
     favourites = getFavourites();
     characterStr = JSON.stringify(openedCharacter);
 
     if (favourites.includes(characterStr)) {
-        console.log("already in favourites")
+        if (favourites.includes(characterStr + ",")) document.cookie = "fav=" + favourites.replace(characterStr + ",", ""); // character isn't the last
+        else if (favourites.includes("," + characterStr)) document.cookie = "fav=" + favourites.replace("," + characterStr, ""); // character is at the end
+        else document.cookie = "fav=" + favourites.replace(characterStr, ""); // there's only one character
+
+        document.getElementById("modal__fav").style.backgroundImage = "url('icons/heart-regular.svg')";
+        console.log("removed from favourites");
         return;
     }
+
+    document.getElementById("modal__fav").style.backgroundImage = "url('icons/heart-solid.svg')";
 
     if (favourites.length != 0) favourites += ",";
 
     favourites += characterStr;
     document.cookie = "fav=" + favourites;
     console.log("added " + openedCharacter.name + " to favourites");
+}
+
+function checkFavourites() {
+    favourites = getFavourites();
+    characterStr = JSON.stringify(openedCharacter);
+
+    if (favourites.includes(characterStr)) return true;
+    return false;
 }
 
 function renderFavourites() {
@@ -186,6 +222,10 @@ function renderFavourites() {
         favouritesListItem.className = "favourites__tile";
 
         favouritesListImage.src = favourites[i].image;
+        if (!favourites[i].image) {
+            if (favourites[i].gender === "male") favouritesListImage.src = "images/defaultWizard.png";
+            else if (favourites[i].gender === "female") favouritesListImage.src = "images/defaultWitch.png";
+        }
         favouritesListName.innerHTML = favourites[i].name;
 
         favouritesListRemoveButton.className = "button favourites__remove";
@@ -196,15 +236,11 @@ function renderFavourites() {
             renderFavourites();
         })
 
-        favouritesListItem.appendChild(favouritesListImage)
-        favouritesListItem.appendChild(favouritesListName)
-        favouritesListItem.appendChild(favouritesListRemoveButton)
-        favouritesList.appendChild(favouritesListItem)
-
-
+        favouritesListItem.appendChild(favouritesListImage);
+        favouritesListItem.appendChild(favouritesListName);
+        favouritesListItem.appendChild(favouritesListRemoveButton);
+        favouritesList.appendChild(favouritesListItem);
     }
-
-
 }
 
 function clearFavourites() {
@@ -222,11 +258,9 @@ function changeRowNumber(rowNumber) {
 
 // ----- Funkcjonalność -----
 // sortowanie dat
-// usuwanie z ulubionych
-// sprawdzić czy postaci już nie ma w ulubionych
 
 // ----- Style -----
 // Dane postaci camelCase -> sentence case
 // wygląd wszystkiego xD
-// responsywność
-//
+// responsywność !!!
+// stopka
