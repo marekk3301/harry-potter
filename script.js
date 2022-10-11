@@ -1,12 +1,12 @@
-const api = "https://hp-api.herokuapp.com/api/characters/"; // link to the api
-const table = document.getElementById("students"); // html table
+const api = "https://hp-api.herokuapp.com/api/characters/", // link to the api
+    table = document.getElementById("students"); // html table
 
-let studentData = null; // data fetched from api
-let sortMode = null; // sorting direction
+let studentData = null, // data fetched from api
+    sortMode = null; // sorting direction
 
-let openedCharacter = null; // using for modal info
-let house = null; // using for caption and row colors
-let favourites;
+let openedCharacter = null, // using for modal info
+    house = null, // using for caption and row colors
+    favourites;
 
 let rowColors = { "gryffindor": "#7F0909", "slytherin": "#196027", "ravenclaw": "#003875", "hufflepuff": "#b55d1d", "gryffindor0": "#cf9797", "gryffindor1": "#ffd54d", "slytherin0": "#98d4a4", "slytherin1": "#dcfaf6", "ravenclaw0": "#8a9fb8", "ravenclaw1": "#cae1fc", "hufflepuff0": "#d9b78f", "hufflepuff1": "#ffd498" };
 
@@ -15,8 +15,8 @@ async function fetchData(category) {
     url += category;
 
     // using await bc fetch and json are asynchronous and we need to wait for the api response
-    const response = await fetch(url);
-    const studentData = await response.json();
+    const response = await fetch(url),
+        studentData = await response.json();
 
     return studentData;
 }
@@ -30,7 +30,10 @@ async function renderTable(category, sortBy) {
         // catching error when category doesn't contain "/"
         try {
             house = category.split("/")[1];
-            document.getElementById("students__title").innerHTML = house.charAt(0).toUpperCase() + house.slice(1);
+            let title = document.getElementById("students__title")
+            title.innerHTML = house.charAt(0).toUpperCase() + house.slice(1);
+            title.style.color = rowColors[house];
+
         } catch (TypeError) {}
     } else document.getElementById("students__title").innerHTML = "All Students";
 
@@ -72,23 +75,24 @@ async function renderTable(category, sortBy) {
     for (let i = 0; i < studentData.length; i++) {
         const row = document.createElement("tr");
 
-        const nameCell = document.createElement("td");
+        const nameCell = document.createElement("td"),
+            dateCell = document.createElement("td"),
+            houseCell = document.createElement("td"),
+            wizardCell = document.createElement("td"),
+            ancestryCell = document.createElement("td");
+
         nameCell.textContent = studentData[i].name;
         row.appendChild(nameCell);
 
-        const dateCell = document.createElement("td");
         dateCell.textContent = studentData[i].dateOfBirth;
         row.appendChild(dateCell);
 
-        const houseCell = document.createElement("td");
         houseCell.textContent = studentData[i].house;
         row.appendChild(houseCell);
 
-        const wizardCell = document.createElement("td");
         wizardCell.textContent = studentData[i].wizard;
         row.appendChild(wizardCell);
 
-        const ancestryCell = document.createElement("td");
         ancestryCell.textContent = studentData[i].ancestry;
         row.appendChild(ancestryCell);
 
@@ -112,7 +116,16 @@ async function renderTable(category, sortBy) {
 
         tableBody.appendChild(row);
     }
+
+    // set table header bg color 
     document.getElementById("tableHeader").style.backgroundColor = rowColors[house];
+
+    // set table border color 
+    const tableElements = document.querySelectorAll('table, table th, table td');
+
+    tableElements.forEach(cell => {
+        cell.style.borderColor = rowColors[house];
+    });
 }
 
 function sortTable(col) {
@@ -128,10 +141,10 @@ function sortTable(col) {
 function openCharacterModal(character) {
     openedCharacter = character;
 
-    const modal = document.getElementById("modal");
-    const modalImg = modal.querySelector("img");
-    const modalName = document.getElementById("modal__name");
-    const modalInfoList = document.getElementById("modal__info");
+    const modal = document.getElementById("modal"),
+        modalImg = modal.querySelector("img"),
+        modalName = document.getElementById("modal__name"),
+        modalInfoList = document.getElementById("modal__info");
 
     // list of character attributes that get displayed in modal
     const characterInfo = ["actor", "ancestry", "dateOfBirth", "eyeColour", "gender", "hairColour", "house", "patronus", "species"];
@@ -141,8 +154,7 @@ function openCharacterModal(character) {
     for (info of characterInfo) {
         const listElement = document.createElement("li");
         const infoText = info.replace(/([A-Z])/g, " $1"); // adding spaces to camelCase
-        const finalInfoText = infoText.charAt(0).toUpperCase() + infoText.slice(1);
-        listElement.innerHTML = finalInfoText + ": " + character[info]
+        listElement.innerHTML = infoText.charAt(0).toUpperCase() + infoText.slice(1) + ": " + character[info]
         modalInfoList.appendChild(listElement)
     }
 
@@ -253,6 +265,5 @@ function clearFavourites() {
 
 function changeRowNumber(rowNumber) {
     columnTemplate = "grid-template-columns: " + "1fr ".repeat(rowNumber) + ";";
-    console.log(columnTemplate);
     document.getElementById("favourites").style = columnTemplate;
 }

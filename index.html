@@ -12,7 +12,7 @@
 
 <body>
     <nav class="navigation">
-        <div class="navigation__elements">
+        <div class="navigation__elements ">
             <div class="navigation__selection pointer" onclick="renderTable('students')">All students</div>
             <div class="navigation__selection pointer" onclick="renderTable('house/gryffindor')">Gryffindor</div>
             <div class="navigation__selection pointer" onclick="renderTable('house/slytherin')">Slytherin</div>
@@ -23,19 +23,22 @@
 
     </nav>
 
-    <table id="students" class="students">
-        <caption id="students__title"></caption>
-        <thead>
-            <tr id="tableHeader">
-                <th id="name" onclick="sortTable('name')" class="pointer">Name</th>
-                <th id="dateOfBirth" onclick="sortTable('dateOfBirth')" class="pointer">Date of birth</th>
-                <th id="house" onclick="sortTable('house')" class="pointer">House</th>
-                <th id="wizard">Wizard</th>
-                <th id="ancestry">Ancestry</th>
-                <th id="hogwartsStudent">Role</th>
-            </tr>
-        </thead>
-    </table>
+    <div id="tableOverflow">
+        <table id="students" class="students">
+            <caption id="students__title"></caption>
+            <thead>
+                <tr id="tableHeader">
+                    <th id="name" onclick="sortTable('name')" class="pointer">Name</th>
+                    <th id="dateOfBirth" onclick="sortTable('dateOfBirth')" class="pointer">Date of birth</th>
+                    <th id="house" onclick="sortTable('house')" class="pointer">House</th>
+                    <th id="wizard">Wizard</th>
+                    <th id="ancestry">Ancestry</th>
+                    <th id="hogwartsStudent">Role</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
 
     <div class="modal" id="modal">
         <div class="modal__content">
