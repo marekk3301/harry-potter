@@ -1,14 +1,13 @@
-const api = "https://hp-api.herokuapp.com/api/characters/", // link to the api
-    table = document.getElementById("students"); // html table
+const api = "https://hp-api.herokuapp.com/api/characters/"; // link to the api
 
 let studentData = null, // data fetched from api
     sortMode = null; // sorting direction
 
 let openedCharacter = null, // using for modal info
-    house = null, // using for caption and row colors
-    favourites;
+    favourites = null,
+    selectedHouse = null; // using for caption and row colors
 
-let rowColors = { "gryffindor": "#7F0909", "slytherin": "#196027", "ravenclaw": "#003875", "hufflepuff": "#b55d1d", "gryffindor0": "#cf9797", "gryffindor1": "#ffd54d", "slytherin0": "#98d4a4", "slytherin1": "#dcfaf6", "ravenclaw0": "#8a9fb8", "ravenclaw1": "#cae1fc", "hufflepuff0": "#d9b78f", "hufflepuff1": "#ffd498" };
+let rowColors = { gryffindor: "#7F0909", slytherin: "#196027", ravenclaw: "#003875", hufflepuff: "#b55d1d", gryffindor0: "#cf9797", gryffindor1: "#ffd54d", slytherin0: "#98d4a4", slytherin1: "#dcfaf6", ravenclaw0: "#8a9fb8", ravenclaw1: "#cae1fc", hufflepuff0: "#d9b78f", hufflepuff1: "#ffd498" };
 
 async function fetchData(category) {
     let url = api;
@@ -24,20 +23,20 @@ async function fetchData(category) {
 async function renderTable(category, sortBy) {
     const table = document.getElementById("students");
     let tableBody = table.querySelector("tbody");
+    let title = document.getElementById("students__title");
 
-    // 
-    if (house) {
-        // catching error when category doesn't contain "/"
-        try {
-            house = category.split("/")[1];
-            let title = document.getElementById("students__title")
-            title.innerHTML = house.charAt(0).toUpperCase() + house.slice(1);
-            title.style.color = rowColors[house];
+    if (selectedHouse) {
+        if (category && category.includes("/")) {
+            selectedHouse = category.split("/")[1];
+            title.innerHTML = selectedHouse.charAt(0).toUpperCase() + selectedHouse.slice(1);
+        }
+    } else {
+        selectedHouse = "gryffindor";
+        title.innerHTML = "All Students";
+    }
+    title.style.color = rowColors[selectedHouse];
 
-        } catch (TypeError) {}
-    } else document.getElementById("students__title").innerHTML = "All Students";
-
-
+    // rendering for the first time
     if (!tableBody) {
         tableBody = document.createElement("tbody");
         table.appendChild(tableBody);
@@ -108,23 +107,21 @@ async function renderTable(category, sortBy) {
 
         row.addEventListener('click', function() {
             openCharacterModal(studentData[i]);
-        })
+        });
 
         // alternating table row colors
-        if (!house) house = "gryffindor";
-        row.style.backgroundColor = rowColors[house + (i % 2).toString()];
+        row.style.backgroundColor = rowColors[selectedHouse + (i % 2).toString()];
 
         tableBody.appendChild(row);
     }
 
     // set table header bg color 
-    document.getElementById("tableHeader").style.backgroundColor = rowColors[house];
+    document.getElementById("tableHeader").style.backgroundColor = rowColors[selectedHouse];
 
     // set table border color 
     const tableElements = document.querySelectorAll('table, table th, table td');
-
     tableElements.forEach(cell => {
-        cell.style.borderColor = rowColors[house];
+        cell.style.borderColor = rowColors[selectedHouse];
     });
 }
 
@@ -142,20 +139,22 @@ function openCharacterModal(character) {
     openedCharacter = character;
 
     const modal = document.getElementById("modal"),
-        modalImg = modal.querySelector("img"),
-        modalName = document.getElementById("modal__name"),
+        modalLeft = document.getElementById("left"),
+        modalImg = document.createElement("img"),
+        modalName = document.createElement("h2"),
         modalInfoList = document.getElementById("modal__info");
+    modalLeft.innerHTML = "";
 
     // list of character attributes that get displayed in modal
-    const characterInfo = ["actor", "ancestry", "dateOfBirth", "eyeColour", "gender", "hairColour", "house", "patronus", "species"];
+    const characterInfo = ["actor", "ancestry", "dateOfBirth", "eyeColour", "gender", "hairColour", "selectedHouse", "patronus", "species"];
 
     modalInfoList.innerHTML = "";
 
-    for (info of characterInfo) {
+    for (let info of characterInfo) {
         const listElement = document.createElement("li");
         const infoText = info.replace(/([A-Z])/g, " $1"); // adding spaces to camelCase
-        listElement.innerHTML = infoText.charAt(0).toUpperCase() + infoText.slice(1) + ": " + character[info]
-        modalInfoList.appendChild(listElement)
+        listElement.innerHTML = infoText.charAt(0).toUpperCase() + infoText.slice(1) + ": " + character[info];
+        modalInfoList.appendChild(listElement);
     }
 
     modalImg.src = character.image;
@@ -163,11 +162,15 @@ function openCharacterModal(character) {
         if (character.gender === "male") modalImg.src = "images/defaultWizard.png";
         else if (character.gender === "female") modalImg.src = "images/defaultWitch.png";
     }
+
+    modalName.id = "modal__name";
     modalName.innerHTML = character.name;
 
     if (checkFavourites()) document.getElementById("modal__fav").style.backgroundImage = "url('icons/heart-solid.svg')";
     else document.getElementById("modal__fav").style.backgroundImage = "url('icons/heart-regular.svg')";
 
+    modalLeft.appendChild(modalImg);
+    modalLeft.appendChild(modalName);
     modal.style.display = 'block';
 }
 
@@ -190,7 +193,7 @@ function getFavourites() {
 
 function addToFavourites() {
     favourites = getFavourites();
-    characterStr = JSON.stringify(openedCharacter);
+    const characterStr = JSON.stringify(openedCharacter);
 
     if (favourites.includes(characterStr)) {
         if (favourites.includes(characterStr + ",")) document.cookie = "fav=" + favourites.replace(characterStr + ",", ""); // character isn't the last
@@ -198,7 +201,6 @@ function addToFavourites() {
         else document.cookie = "fav=" + favourites.replace(characterStr, ""); // there's only one character
 
         document.getElementById("modal__fav").style.backgroundImage = "url('icons/heart-regular.svg')";
-        console.log("removed from favourites");
         return;
     }
 
@@ -208,12 +210,11 @@ function addToFavourites() {
 
     favourites += characterStr;
     document.cookie = "fav=" + favourites;
-    console.log("added " + openedCharacter.name + " to favourites");
 }
 
 function checkFavourites() {
     favourites = getFavourites();
-    characterStr = JSON.stringify(openedCharacter);
+    const characterStr = JSON.stringify(openedCharacter);
 
     if (favourites.includes(characterStr)) return true;
     return false;
@@ -222,14 +223,14 @@ function checkFavourites() {
 function renderFavourites() {
     favourites = JSON.parse("[" + getFavourites() + "]");
 
-    favouritesList = document.getElementById("favourites");
+    const favouritesList = document.getElementById("favourites");
     favouritesList.innerHTML = "";
 
     for (let i = 0; i < favourites.length; i++) {
-        favouritesListItem = document.createElement("div");
-        favouritesListImage = document.createElement("img");
-        favouritesListName = document.createElement("h3");
-        favouritesListRemoveButton = document.createElement("button");
+        const favouritesListItem = document.createElement("div");
+        const favouritesListImage = document.createElement("img");
+        const favouritesListName = document.createElement("h3");
+        const favouritesListRemoveButton = document.createElement("button");
 
         favouritesListItem.className = "favourites__tile";
 
@@ -245,10 +246,10 @@ function renderFavourites() {
         favouritesListRemoveButton.className = "button favourites__remove";
         favouritesListRemoveButton.addEventListener('click', function() {
             favourites.splice(i, 1);
-            cookieStr = JSON.stringify(favourites);
+            const cookieStr = JSON.stringify(favourites);
             document.cookie = "fav=" + cookieStr.substring(1, cookieStr.length - 1);
             renderFavourites();
-        })
+        });
 
         favouritesListItem.appendChild(favouritesListImage);
         favouritesListItem.appendChild(favouritesListName);
@@ -260,10 +261,9 @@ function renderFavourites() {
 function clearFavourites() {
     document.cookie = "fav=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
     document.getElementById("favourites").innerHTML = "";
-    return "cleared favourites";
 }
 
 function changeRowNumber(rowNumber) {
-    columnTemplate = "grid-template-columns: " + "1fr ".repeat(rowNumber) + ";";
+    const columnTemplate = "grid-template-columns: " + "1fr ".repeat(rowNumber) + ";";
     document.getElementById("favourites").style = columnTemplate;
 }

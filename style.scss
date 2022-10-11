@@ -96,6 +96,8 @@ body {
                 justify-content: center;
                 align-items: center;
                 height: 60px;
+                text-decoration: none;
+                color: inherit;
                 &:hover {
                     background-color: $background;
                     color: $accent;
@@ -137,18 +139,19 @@ body {
         }
         z-index: 3;
     }
-    #tableOverflow {
+    .tableOverflow {
         overflow-x: auto;
     }
     table {
         margin: auto;
         margin-top: 60px;
+        margin-bottom: 60px;
         border-spacing: 0;
         border: 3px solid $accent;
         @include sm {
             margin-top: 120px;
         }
-        #students__title {
+        .students__title {
             font-family: $headerFont;
             font-size: 1.2em;
             color: $accent;
@@ -169,8 +172,6 @@ body {
             font-family: $paragraphFont;
             tr {
                 &:hover {
-                    // opacity: 0.8;
-                    // font-weight: 700;
                     text-shadow: 0px 0px 1px $black;
                 }
             }
@@ -237,15 +238,15 @@ body {
                         @include button;
                         margin: 4px;
                     }
-                    #modal__close {
+                    .modal__close {
                         background-image: url("icons/xmark-solid.svg");
                         transform: scale(130%);
                     }
-                    #modal__fav {
+                    .modal__fav {
                         background-image: url("icons/heart-regular.svg");
                     }
                 }
-                #modal__info {
+                .modal__info {
                     list-style: none;
                     font-family: $paragraphFont;
                     margin-bottom: 30px;

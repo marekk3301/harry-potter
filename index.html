@@ -18,14 +18,14 @@
             <div class="navigation__selection pointer" onclick="renderTable('house/slytherin')">Slytherin</div>
             <div class="navigation__selection pointer" onclick="renderTable('house/ravenclaw')">Ravenclaw</div>
             <div class="navigation__selection pointer" onclick="renderTable('house/hufflepuff')">Hufflepuff</div>
-            <div class="navigation__selection pointer" onclick="location.href='favourites.html';">Favourites</div>
+            <a class="navigation__selection pointer" href="favourites.html">Favourites</a>
         </div>
 
     </nav>
 
-    <div id="tableOverflow">
+    <div id="tableOverflow" class="tableOverflow">
         <table id="students" class="students">
-            <caption id="students__title"></caption>
+            <caption id="students__title" class="students__title"></caption>
             <thead>
                 <tr id="tableHeader">
                     <th id="name" onclick="sortTable('name')" class="pointer">Name</th>
@@ -42,17 +42,14 @@
 
     <div class="modal" id="modal">
         <div class="modal__content">
-            <div class="left">
-                <img src="">
-                <h2 id="modal__name"></h2>
-            </div>
+            <div id="left" class="left"></div>
             <div class="right">
                 <div class="buttons">
-                    <button class="button" id="modal__fav" onclick="addToFavourites()"></button>
-                    <button class="button" id="modal__close" onclick="closeCharacterModal()"></button>
+                    <button class="button modal__fav" id="modal__fav" onclick="addToFavourites()"></button>
+                    <button class="button modal__close" id="modal__close" onclick="closeCharacterModal()"></button>
                 </div>
 
-                <ul id="modal__info"></ul>
+                <ul id="modal__info" class="modal__info"></ul>
             </div>
         </div>
 

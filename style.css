@@ -40,6 +40,8 @@ body .navigation .navigation__elements .navigation__selection {
   justify-content: center;
   align-items: center;
   height: 60px;
+  text-decoration: none;
+  color: inherit;
 }
 body .navigation .navigation__elements .navigation__selection:hover {
   background-color: #FFC500;
@@ -78,12 +80,13 @@ body .navigation .navigation__elements .navigation__rowCountButtons button {
   color: #7F0909;
   font-family: "Figtree", sans-serif;
 }
-body #tableOverflow {
+body .tableOverflow {
   overflow-x: auto;
 }
 body table {
   margin: auto;
   margin-top: 60px;
+  margin-bottom: 60px;
   border-spacing: 0;
   border: 3px solid #7F0909;
 }
@@ -92,7 +95,7 @@ body table {
     margin-top: 120px;
   }
 }
-body table #students__title {
+body table .students__title {
   font-family: "Alkalami", serif;
   font-size: 1.2em;
   color: #7F0909;
@@ -218,14 +221,14 @@ body .modal .modal__content .right .buttons .button {
   border: none;
   margin: 4px;
 }
-body .modal .modal__content .right .buttons #modal__close {
+body .modal .modal__content .right .buttons .modal__close {
   background-image: url("icons/xmark-solid.svg");
   transform: scale(130%);
 }
-body .modal .modal__content .right .buttons #modal__fav {
+body .modal .modal__content .right .buttons .modal__fav {
   background-image: url("icons/heart-regular.svg");
 }
-body .modal .modal__content .right #modal__info {
+body .modal .modal__content .right .modal__info {
   list-style: none;
   font-family: "Figtree", sans-serif;
   margin-bottom: 30px;
